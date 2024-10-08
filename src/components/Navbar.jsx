@@ -1,13 +1,34 @@
-import { useSelector } from "react-redux";
+import axios from "axios";
+import { useDispatch, useSelector } from "react-redux";
+import { Link } from "react-router-dom";
+import { BASE_URL } from "../utils/constants";
+import { removeUser } from "../utils/userSlice";
 
 const Navbar = () => {
   const user = useSelector((store) => store.user);
+  const dispatch = useDispatch();
+
+  const handleLogout = async () => {
+    try {
+      const response = await axios.post(
+        `${BASE_URL}/logout`,
+        {}, 
+        { withCredentials: true } 
+      );
+      console.log("Logged out successfully:", response.data);
+      dispatch(removeUser());
+    } catch (error) {
+      console.error("Logout failed:", error);
+    }
+  };
 
   return (
     <div>
       <div className="navbar bg-base-300">
         <div className="flex-1">
-          <a className="btn btn-ghost text-xl">TinderDev</a>
+          <Link to="/" className="btn btn-ghost text-xl">
+            TinderDev
+          </Link>
         </div>
         <div className="flex-none">
           <div className="dropdown dropdown-end">
@@ -77,7 +98,7 @@ const Navbar = () => {
                   <a>Settings</a>
                 </li>
                 <li>
-                  <a>Logout</a>
+                  <a onClick={handleLogout}>Logout</a>
                 </li>
               </ul>
             </div>
