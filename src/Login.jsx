@@ -9,12 +9,11 @@ const Login = () => {
 
   const handleLogin = async (e) => {
     e.preventDefault();
-    console.log("inside");
     try {
       const result = await axios.post(
         "http://localhost:3001/login",
         {
-          emailId: email, // Keep emailId here as the server expects this
+          emailId: email, 
           password,
         },
         { withCredentials: true }
