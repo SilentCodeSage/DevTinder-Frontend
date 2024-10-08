@@ -1,31 +1,37 @@
 import axios from "axios";
-import React from "react";
 import { useState } from "react";
+import { useDispatch } from "react-redux";
+import { addUser } from "./utils/userSlice";
+import { useNavigate } from "react-router-dom";
+import { BASE_URL } from "./utils/constants";
 
 const Login = () => {
   const [email, setEmail] = useState("ratan@gamil.com");
   const [password, setPassword] = useState("Ratan@123");
-  console.log(email, password);
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   const handleLogin = async (e) => {
     e.preventDefault();
     try {
       const result = await axios.post(
-        "http://localhost:3001/login",
+        BASE_URL + "/login",
         {
-          emailId: email, 
+          emailId: email,
           password,
         },
         { withCredentials: true }
       );
       console.log(result.data);
+      dispatch(addUser(result.data));
+      navigate("/");
     } catch (error) {
       console.error(error);
     }
   };
 
   return (
-    <div className="flex justify-center items-center min-h-screen">
+    <div className="flex justify-center items-center h-full">
       <div className="card bg-base-200 text-primary-content w-96 shadow-lg">
         <div className="card-body">
           <div className="w-full flex justify-center">
@@ -42,7 +48,7 @@ const Login = () => {
                 type="email"
                 value={email}
                 placeholder="Enter your email"
-                className="input input-bordered w-full"
+                className="input text-white input-bordered w-full"
               />
             </div>
 
@@ -55,7 +61,7 @@ const Login = () => {
                 type="password"
                 value={password}
                 placeholder="Enter your password"
-                className="input input-bordered w-full"
+                className="input text-white input-bordered w-full"
               />
             </div>
 
