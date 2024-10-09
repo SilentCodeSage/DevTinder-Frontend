@@ -10,6 +10,7 @@ const Body = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const userData = useSelector((store) => store.user);
+
   const fetchUser = async () => {
     //if already present then no need for another api call
     if (userData) return;
@@ -17,10 +18,8 @@ const Body = () => {
       const result = await axios.get(BASE_URL + "/profile/view", {
         withCredentials: true,
       });
-      console.log(result);
       dispatch(addUser(result.data));
     } catch (error) {
-        
       if (error.status === 401) {
         navigate("/login");
       } else {
