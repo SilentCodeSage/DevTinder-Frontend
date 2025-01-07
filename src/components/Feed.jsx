@@ -6,16 +6,15 @@ import { useEffect } from "react";
 import UserCard from "./UserCard";
 const Feed = () => {
   const dispatch = useDispatch();
-
   const feed = useSelector((store) => store.feed);
-
+  console.log(feed);
   const getFeed = async () => {
     if (feed) return;
     try {
       const result = await axios.get(`${BASE_URL}/feed`, {
         withCredentials: true,
       });
-      console.log(result);
+      console.log(result.data);
       dispatch(addFeed(result.data));
     } catch (error) {
       console.error(error);
@@ -25,11 +24,18 @@ const Feed = () => {
   useEffect(() => {
     getFeed();
   }, []);
+
+  if (!feed) {
+    return;
+  }
+  if(feed.length === 0){
+    return <div>No new users.....</div>
+  }
   return (
-    feed && <div className="h-full">
-        <UserCard user = {feed} />
+    <div className="h-full">
+      {console.log(feed)}
+      <UserCard user={feed[0]} />
     </div>
-    
   );
 };
 
